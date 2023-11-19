@@ -1,0 +1,137 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Profile {% endblock %} 
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <div class="col-xl-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Energy History</h5>
+                                        </div>
+                                        <div class="card-block">
+                                            <div id="energy_history" class="ChartShadow" style="height:300px"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Sensor History</h5>
+                                        </div>
+                                        <div class="card-block">
+                                            <div id="sensor_history" class="ChartShadow" style="height:300px"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Maximum of Movement</h5>
+                                        </div>
+                                        <div class="card-block">
+                                            <div id="maximum_movement" class="ChartShadow" style="height:300px"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+        <!-- chart-morris Js -->
+        <script src="{{ ASSETS_ROOT }}/plugins/chart-morris/js/raphael.min.js"></script>
+        <script src="{{ ASSETS_ROOT }}/plugins/chart-morris/js/morris.min.js"></script>
+        <script src="{{ ASSETS_ROOT }}/js/pages/chart-morris-custom.js"></script>
+    
+        <script>
+            new Morris.Line({
+                // ID of the element in which to draw the chart.
+                element: 'energy_history',
+                // Chart data records -- each entry in this array corresponds to a point on
+                // the chart.
+                data: [
+                {% for world in worlds %}
+                    { x: {{ forloop.counter0 }}, value: {{ world.median_starting_energy }} }{% if not forloop.last %},{% endif %}
+                {% endfor %}
+                ],
+                // The name of the data record attribute that contains x-values.
+                xkey: 'x',
+                // A list of names of data record attributes that contain y-values.
+                ykeys: ['value'],
+                // Labels for the ykeys -- will be displayed when you hover over the
+                // chart.
+                labels: ['Value'],
+                parseTime: false
+              });
+        </script>
+
+        <script>
+            new Morris.Line({
+                // ID of the element in which to draw the chart.
+                element: 'sensor_history',
+                // Chart data records -- each entry in this array corresponds to a point on
+                // the chart.
+                data: [
+                {% for world in worlds %}
+                    { x: {{ forloop.counter0 }}, value: {{ world.median_sensor_radius }} }{% if not forloop.last %},{% endif %}
+                {% endfor %}
+                ],
+                // The name of the data record attribute that contains x-values.
+                xkey: 'x',
+                // A list of names of data record attributes that contain y-values.
+                ykeys: ['value'],
+                // Labels for the ykeys -- will be displayed when you hover over the
+                // chart.
+                labels: ['Value'],
+                parseTime: false
+              });
+        </script>
+
+        <script>
+            new Morris.Line({
+                // ID of the element in which to draw the chart.
+                element: 'maximum_movement',
+                // Chart data records -- each entry in this array corresponds to a point on
+                // the chart.
+                data: [
+                {% for world in worlds %}
+                    { x: {{ forloop.counter0 }}, value: {{ world.maximum_moves }} }{% if not forloop.last %},{% endif %}
+                {% endfor %}
+                ],
+                // The name of the data record attribute that contains x-values.
+                xkey: 'x',
+                // A list of names of data record attributes that contain y-values.
+                ykeys: ['value'],
+                // Labels for the ykeys -- will be displayed when you hover over the
+                // chart.
+                labels: ['Value'],
+                parseTime: false
+              });
+        </script>
+
+{% endblock javascripts %}

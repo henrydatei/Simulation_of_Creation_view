@@ -49,15 +49,6 @@ def simulation_dashboard(request, simulation_id):
         group by x.worlds_id;
         """)
     max_moves = cursor.fetchall()
-    
-    # Muss noch angepasst werden
-    cursor.execute("""SELECT remaining_food FROM `worlds` ORDER BY `worlds`.`id`;""")
-    remaining_foods = cursor.fetchall()
-    print("Test")
-    print(remaining_foods)
-    for food in remaining_foods:
-        remaining_food.append(food[0])
-    print(remaining_food)
                       
     cursor.close()
     max_moves = {x[0]: x[1] for x in max_moves}
@@ -67,13 +58,11 @@ def simulation_dashboard(request, simulation_id):
         if creatures:
             world.median_starting_energy = np.median([creature.start_energy for creature in creatures])
             world.median_sensor_radius = np.median([creature.sensor_radius for creature in creatures])
-            world.remaining_food = remaining_food[counter]
             world.maximum_moves = max_moves[world.id]
         else:
             world.median_starting_energy = 0
             world.median_sensor_radius = 0
             world.maximum_moves = 0
-            world.remaining_food = 0
     
     context = {'segment': 'simulation_dashboard', 'simulation': simulation, 'worlds': worlds}
 

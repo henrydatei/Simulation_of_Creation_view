@@ -45,6 +45,7 @@ class Worlds(models.Model):
     width = models.IntegerField(blank=True, null=True)
     height = models.IntegerField(blank=True, null=True)
     simulation = models.ForeignKey(Simulations, models.DO_NOTHING, blank=True, null=True)
+    remaining_food = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
